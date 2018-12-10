@@ -1,0 +1,40 @@
+1) Created a function in BPIPreProcess to process single input file. This is done not to preprocess every file in Data and clutter the folder. 
+	Also accepts a argument to create a folder (output_directory) and all the outputs go automatically there accordingly.
+	It returns 3 variables: 
+	train_file - the preprocessed file to feed into LogFile, 
+	test_file - the preprocessed file to feed into LogFile (for test), 
+	experiment_folder - the directory where are you running the experiments (if you provided output_directory, "../Data" else)
+	
+	a) Example:
+		which_dataset = "../Data/BPIC15_1_sorted.csv"
+		preprocess_folder = "run/"
+		train_file, test_file, experiment_folder = preProcessFile(which_dataset, preprocess_folder)
+		
+		it will create a folder "run" inside "../Data" and will output 2 files:
+			{dataset_train/test}_preprocessed.csv inside it
+		it will return a train_file and a test_file:
+			train_file = "../Data/run/BPIC15_1_sorted_train_preprocessed.csv"
+			test_file = "../Data/run/BPIC15_1_sorted_test_preprocessed.csv"
+			experiment_folder = "../Data/run/" # where are you running your experiments
+	
+
+2) Inside LogFile if the filename you are providing is not preprocessed (does not have "_preprocessed" in the filename) it will raise an error
+	telling you to preprocess before you run
+
+3) Inside LogFile added self.convert2ints_filename which builds based on the {train/test}_filename and adds "_converted_ints".
+	This will create convert2ints file inside the experiments folder if you provided it in preprocessing (point 1)
+
+4) Fixed the manual "case" attribute. This was a bit weird but I saw in the code in "extended_Dynamic_Bayesian_Network" 
+	that you used "p.map(process, data..)" and when using mapping is not that easy to pass arguments. Since only one argument was needed
+	i used "p.map(partial(process, col=accum_attr), data..)". That seemed to fix the issue.
+
+
+
+## new changes
+
+1) In extendedDynamicBayesianNetwork line 119 returned the scores directly but did not work, commented it. Also line 18 add a touple
+for (artificial) time.
+
+2) in extended_DBN class added a variable to hold the nodes and the edges
+
+3) parametric RunDBN so I can run it from the application

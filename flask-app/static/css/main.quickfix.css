@@ -1,0 +1,171 @@
+
+/**
+ * @file
+ * Quickfix stylesheet file.
+ *
+ * Contains immediate fixes that should be revised later and added in the
+ * main.css.
+ */
+
+#container-id{
+    margin-bottom: 20rem;
+}
+
+.antwerp-logo, .adrem-logo{
+    width: 12rem;
+    margin-bottom: 1rem;
+    display: inline-block;
+}
+
+.adrem-logo{
+    width: 5rem;
+    margin-left: 5rem;
+}
+
+.smaller-width{
+    width: 60%;
+    margin: 0 auto 1rem auto;
+    font-size: 12px;
+}
+
+.jumbotron p{
+    font-size: 100%;
+}
+
+.page-header{
+    margin-top: 1rem;
+}
+
+.bg-dark{
+    background-color: #003756 !important;
+}
+
+.navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>.active>a:focus{
+    background: #006598;
+}
+
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a{
+    color: #f3f3f3;
+}
+
+.btn-primary{
+    background-color: #004566 !important;
+    border-color: #003756 !important;;
+}
+
+
+.width_extend{
+    width: 110px !important;
+}
+
+/*https://seiyria.com/bootstrap-slider/*/
+.slider-group{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    margin-right: 20px;
+}
+
+.slider-selection {
+	/*background: #881033;*/
+	background: #c9302c;
+}
+
+.slider-handle{
+    background: #004566;
+}
+
+.toolbox-bar{
+    position: relative;
+    border: solid 1px #ddd;
+    padding: 20px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+    border-bottom: none;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+.button-toolbox{
+    padding: 7px;
+    margin-right: 20px;
+    color: #004566;
+    cursor: pointer;
+}
+
+.switch-button{
+
+}
+
+.helper-button{
+    margin-right: auto;
+}
+
+.helper-box.can_see{
+    display: block;
+}
+
+.helper-box{
+    display: none;
+    position: absolute;
+    top: 85px;
+    left: 10px;
+    background: #fcfcfc;
+    width: 280px;
+
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+    border-radius: 7px;
+    opacity: 0.9;
+    z-index: 100;
+    border: solid 1px #ddd;
+}
+
+.helper-box:hover{
+    opacity: 1;
+}
+
+.helper-box > ul{
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+.helper-box ul li{
+    padding: 10px;
+    border-bottom: solid 1px #ddd;
+}
+
+.helper-box ul li:last-child{
+    border-bottom: none;
+}
+
+.my-red{
+    background: #c9302c;
+    border-color: #ac2925;
+}
+
+.my-red:hover{
+    background: #d9332f;
+}
+
+.my-blue{
+    background: #004566;
+}
+
+.label-info{
+    background-color: #004566;
+}
+
+.queue-btn{
+    margin-right: 30px;
+}
+
+/*
+Bootstrap taginput
+*/
+.bootstrap-tagsinput{
+    display: block;
+}

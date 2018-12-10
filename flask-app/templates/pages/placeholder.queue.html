@@ -1,0 +1,62 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Drawlog* - Queue{% endblock %}
+{% block content %}
+
+
+<div class="page-header" id="paper">
+    <h1>Queue</h1>
+</div>
+
+    <div class="queues">
+    {% for q in all_queued %}
+        <div class="card">
+            <div class="tags">{{ q.experiment.tags|print_tags }}</div>
+            <div class="name">{{ q.experiment.name }}</div>
+            <div class="dataset">{{ q.experiment.data_file_path }}</div>
+            <div class="authors">by {{ q.experiment.authors|join(', ', attribute="author") }}</div>
+            <div><a href="/show_network/{{ q.experiment.id }}">Show network</a></div>
+            <div>status: {{ q.status }}</div>
+            <div class="play">
+                <i class="fas fa-play"></i>
+            </div>
+
+            <input type="checkbox" name="info" id="info">
+
+            <div class="helper noselect">
+                <label for="info">
+                    <i class="fas fa-info"></i>
+                </label>
+            </div>
+
+            <div class="show-more">
+                <div class="start">Start: {{q.experiment.queued_at}}</div>
+                <div class="start">End: {{q.experiment.queued_end}}</div>
+                <div class="notes">Notes: {{ q.experiment.notes }}</div>
+                <div class="parameters">Alias: {{ q.experiment.alias }}</div>
+            </div>
+        </div>
+    {% endfor %}
+
+{#        <div class="card older">#}
+{#            <div class="tags">#tag1 #tag2</div>#}
+{#            <div class="name">Name</div>#}
+{#            <div class="dataset">data.csv</div>#}
+{#            <div class="authors">by Armando, Stephen, Test</div>#}
+{#            <div class="play">#}
+{#                <i class="fas fa-play"></i>#}
+{#            </div>#}
+{#            <div class="helper noselect">#}
+{#                <label for="info">#}
+{#                    <i class="fas fa-info"></i>#}
+{#                </label>#}
+{#                <input type="checkbox" name="info" id="info">#}
+{#            </div>#}
+{#            <div class="show-more">#}
+{#                <div class="network">show network</div>#}
+{#                <div class="notes">Notes...</div>#}
+{#                <div class="parameters">alpha: 15, beta: 17</div>#}
+{#            </div>#}
+{#        </div>#}
+    </div>
+
+{% endblock %}

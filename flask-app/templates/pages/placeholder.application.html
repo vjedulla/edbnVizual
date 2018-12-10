@@ -1,0 +1,381 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Drawlog* - Application{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Drawlog* Application</h1>
+</div>
+
+<div class="row">
+    <section>
+        <div class="wizard">
+            <div class="wizard-inner">
+                <div class="connecting-line"></div>
+                <ul class="nav nav-tabs" role="tablist">
+
+                    <li role="presentation" class="active">
+                        <a href="#step1" data-toggle="tab" aria-controls="step1" role="tab" title="General Information">
+                            <span class="round-tab">
+                                <i class="fas fa-address-card"></i>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#step2" data-toggle="tab" aria-controls="step2" role="tab" title="Load data">
+                            <span class="round-tab">
+                                <i class="fas fa-upload"></i>
+                            </span>
+                        </a>
+                    </li>
+{#                    <li role="presentation">#}
+{#                        <a href="#step3" data-toggle="tab" class="networkModel" aria-controls="step3" role="tab" title="Configure model">#}
+{#                            <span class="round-tab">#}
+{#                                <i class="fas fa-atom"></i>#}
+{#                            </span>#}
+{#                        </a>#}
+{#                    </li>#}
+{##}
+{#                    <li role="presentation">#}
+{#                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Run analysis">#}
+{#                            <span class="round-tab">#}
+{#                                <i class="far fa-chart-bar"></i>#}
+{#                            </span>#}
+{#                        </a>#}
+{#                    </li>#}
+                </ul>
+            </div>
+
+            <form id="queueing_form" role="form" action="/submit_to_queue" method="post" enctype="multipart/form-data">
+                <div class="tab-content">
+                    <div class="tab-pane active" role="tabpanel" id="step1">
+                        <h3>General information</h3>
+                        <p>
+                            Fill the form of creating a run for the
+                            Concept Drift method.
+                        </p>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name of run</label>
+                                <input type="text" class="form-control" id="name-input" name="name-input" placeholder="Name">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Tags</label>
+                                <input type="text" class="form-control" id="tags-input" name="tags-input"  data-role="tagsinput" placeholder="Tags">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Notes</label>
+                                <input type="text" class="form-control" id="notes-input" name="notes-input" placeholder="Notes...">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="name">Author of the run</label>
+                                <input type="text" class="form-control" id="author-input" name="author-input" data-role="tagsinput" placeholder="Author">
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-primary next-step pull-right">Continue</button>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane" role="tabpanel" id="step2">
+                        <h3>Load data</h3>
+                        <p>
+                            Load the data you want to analyse.
+                        </p>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Alias of the dataset</label>
+                                <input type="text" class="form-control" id="alias-input" name="alias-input" placeholder="Alias">
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputFile">Dataset file</label>
+                                <input type="file" name="datasetInputFile" id="datasetInputFile">
+                                <p class="help-block">Accepted format: csv....</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-default prev-step">Previous</button>
+{#                            <button type="button" class="btn btn-primary next-step pull-right" data-type="log_file">Continue</button>#}
+                            <button type="button" id="add_to_queue" class="btn btn-warning queue-btn pull-right">Add to queue</button>
+                        </div>
+
+                    </div>
+                </div>
+            </form>
+
+
+{#            <div class="tab-content">#}
+{#                <div class="tab-pane" role="tabpanel" id="step3">#}
+{#                    <h3>Configure model</h3>#}
+{#                    <p>#}
+{#                        Below there is the model learned from#}
+{#                        the eDBN.#}
+{#                    </p>#}
+{##}
+{#                    <div class="col-md-12">#}
+{#                        <div class="graph-toolbox">#}
+{#                            <div class="toolbox-bar">#}
+{#                                <div class="helper-box">#}
+{##}
+{#                                    <ul>#}
+{#                                        <li>On Edit mode:</li>#}
+{#                                        <li>Double click to create new node.</li>#}
+{#                                        <li>Click two nodes to link them (directed).</li>#}
+{#                                        <li>Double click an edge to delete it.</li>#}
+{#                                    </ul>#}
+{##}
+{#                                </div>#}
+{#                                <div class="button-toolbox helper-button">#}
+{#                                    <i class="far fa-question-circle"></i>#}
+{#                                    Helper#}
+{#                                </div>#}
+{#                                <div class="button-toolbox back-button">#}
+{#                                    <i class="fas fa-undo"></i>#}
+{#                                    Undo#}
+{#                                </div>#}
+{#                                <div class="button-toolbox resize-button">#}
+{#                                    <i class="fas fa-compass"></i>#}
+{#                                    Resize#}
+{#                                </div>#}
+{#                                <div class="button-toolbox redo-button">#}
+{#                                    <i class="fas fa-redo-alt"></i>#}
+{#                                    Redo#}
+{#                                </div>#}
+{#                                <input type="checkbox" id="switch-button-checkbox" data-toggle="toggle" data-on="Edit mode" data-off="View mode" data-style="width_extend button-toolbox switch-button" data-onstyle="danger my-red" data-offstyle="primary my-blue">#}
+{#                            </div>#}
+{##}
+{#                            <div id="cy">#}
+{#                                <div class="btn btn-sm btn-primary">Test</div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div class="col-md-12">#}
+{#                        <h4>Configure parameters</h4>#}
+{##}
+{#                        <div class="slider-group">#}
+{#                            <div class="form-group">#}
+{#                                Alpha (α)#}
+{#                                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>#}
+{#                            </div>#}
+{##}
+{#                            <div class="form-group">#}
+{#                                Beta (β)#}
+{#                                <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>#}
+{#                            </div>#}
+{##}
+{#                            <div class="form-group">#}
+{#                                Gamma (γ)#}
+{#                                <input id="ex3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>#}
+{#                            </div>#}
+{##}
+{#                            <div class="form-group">#}
+{#                                Sigma (σ)#}
+{#                                <input id="ex4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>#}
+{#                            </div>#}
+{##}
+{#                            <div class="form-group">#}
+{#                                Theta (θ)#}
+{#                                <input id="ex5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>#}
+{#                            </div>#}
+{##}
+{#                            <div class="form-group">#}
+{#                                Threshold (ε) <b>10</b> <input id="ex6" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]"/> <b>1000</b>#}
+{#                            </div>#}
+{#                        </div>#}
+{##}
+{##}
+{##}
+{#                    </div>#}
+{##}
+{##}
+{#                    <div class="col-md-12">#}
+{#                        <button type="button" class="btn btn-default prev-step">Previous</button>#}
+{#                        <button type="button" class="btn btn-primary next-step pull-right">Continue</button>#}
+{#                    </div>#}
+{#                </div>#}
+{#                <div class="tab-pane" role="tabpanel" id="complete">#}
+{#                    <h3>Current run</h3>#}
+{##}
+{##}
+{#                    <div class="card">#}
+{#                        <div class="tags">#tag1 #tag2</div>#}
+{#                        <div class="name">Name</div>#}
+{#                        <div class="dataset">data.csv</div>#}
+{#                        <div class="authors">by Armando, Sandy, Test</div>#}
+{#                        <div class="helper noselect">#}
+{#                            <label for="info">#}
+{#                                <i class="fas fa-info"></i>#}
+{#                            </label>#}
+{#                            <input type="checkbox" name="info" id="info">#}
+{#                        </div>#}
+{#                        <div class="show-more">#}
+{#                            <div class="network">show network</div>#}
+{#                            <div class="notes">Notes...</div>#}
+{#                            <div class="parameters">alpha: 15, beta: 17</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <h3>Queue of older runs</h3>#}
+{##}
+{#                    <div class="card older">#}
+{#                        <div class="tags">#tag1 #tag2</div>#}
+{#                        <div class="name">Name</div>#}
+{#                        <div class="dataset">data.csv</div>#}
+{#                        <div class="authors">by Armando, Sandy, Test</div>#}
+{#                        <div class="helper noselect">#}
+{#                            <label for="info">#}
+{#                                <i class="fas fa-info"></i>#}
+{#                            </label>#}
+{#                            <input type="checkbox" name="info" id="info">#}
+{#                        </div>#}
+{#                        <div class="show-more">#}
+{#                            <div class="network">show network</div>#}
+{#                            <div class="notes">Notes...</div>#}
+{#                            <div class="parameters">alpha: 15, beta: 17</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div class="card older">#}
+{#                        <div class="tags">#tag1 #tag2</div>#}
+{#                        <div class="name">Name</div>#}
+{#                        <div class="dataset">data.csv</div>#}
+{#                        <div class="authors">by Armando, Sandy, Test</div>#}
+{#                        <div class="helper noselect">#}
+{#                            <label for="info">#}
+{#                                <i class="fas fa-info"></i>#}
+{#                            </label>#}
+{#                            <input type="checkbox" name="info" id="info">#}
+{#                        </div>#}
+{#                        <div class="show-more">#}
+{#                            <div class="network">show network</div>#}
+{#                            <div class="notes">Notes...</div>#}
+{#                            <div class="parameters">alpha: 15, beta: 17</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{#                    <div class="card older">#}
+{#                        <div class="tags">#tag1 #tag2</div>#}
+{#                        <div class="name">Name</div>#}
+{#                        <div class="dataset">data.csv</div>#}
+{#                        <div class="authors">by Armando, Sandy, Test</div>#}
+{#                        <div class="helper noselect">#}
+{#                            <label for="info">#}
+{#                                <i class="fas fa-info"></i>#}
+{#                            </label>#}
+{#                            <input type="checkbox" name="info" id="info">#}
+{#                        </div>#}
+{#                        <div class="show-more">#}
+{#                            <div class="network">show network</div>#}
+{#                            <div class="notes">Notes...</div>#}
+{#                            <div class="parameters">alpha: 15, beta: 17</div>#}
+{#                        </div>#}
+{#                    </div>#}
+{##}
+{##}
+{#                        <div class="col-md-4">#}
+{#                            <div class="name-show"></div>#}
+{#                            <div class="author-show"></div>#}
+{#                            <div class="dataset-show"></div> <div class="alias-show"></div>#}
+{#                        </div>#}
+{#                        <div class="col-md-4">#}
+{#                            <div class="note-show"></div>#}
+{#                            <div class="tags-show"></div>#}
+{#                            <div class="parameters-show"></div>#}
+{#                        </div>#}
+{#                        <div class="col-md-4">#}
+{#                            (modified/as-is)#}
+{#                        </div>#}
+{##}
+{##}
+{#                </div>#}
+{#                <div class="clearfix"></div>#}
+{#            </div>#}
+
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+
+
+
+
+
+{#var profitData = [{ x: "profit", y: 0.23 }];#}
+{#var profitThresholds = [#}
+{#    { x: "profit", stage: 0, low: 0, high: 0.20 },#}
+{#    { x: "profit", stage: 1, low: 0.20, high: 0.25 },#}
+{#    { x: "profit", stage: 2, low: 0.25, high: 0.30 }#}
+{#];#}
+{##}
+{#var usersData = [{ x: "newCust", y: 1600 }];#}
+{#var usersThresholds = [{ x: "newCust", stage: 0, low: 0, high: 1500 }, { x: "newCust", stage: 1, low: 1500, high: 2000 }, { x: "newCust", stage: 2, low: 2000, high: 2500 }];#}
+{##}
+{#var salaryData = [{ x: "revenue", y: 280000 }];#}
+{#var salaryThresholds = [{ x: "revenue", stage: 0, low: 0, high: 150000 }, { x: "revenue", stage: 1, low: 150000, high: 225000 }, { x: "revenue", stage: 2, low: 225000, high: 300000 }];#}
+{##}
+{#var salesData = [{ x: "sales", y: 280 }];#}
+{#var salesThresholds = [{ x: "sales", stage: 0, low: 0, high: 350 }, { x: "sales", stage: 1, low: 350, high: 500 }, { x: "sales", stage: 2, low: 500, high: 600 }];#}
+{##}
+{#function createChart(data, thresholds, formatter, title) {#}
+{#  var xScale = new Plottable.Scales.Category();#}
+{#  var xScaleBg = new Plottable.Scales.Category();#}
+{#  var yScale = new Plottable.Scales.Linear().domain([thresholds[0].low, thresholds[thresholds.length - 1].high]);#}
+{##}
+{#  var colorScale = new Plottable.Scales.InterpolatedColor().range(["#9ac3f9", "#E3F2FD"]);#}
+{##}
+{#  var barPlot = new Plottable.Plots.Bar().x(function (d) {#}
+{#    return d.x;#}
+{#  }, xScale).y(function (d) {#}
+{#    return d.y;#}
+{#  }, yScale).attr("fill", "#25383C").addDataset(new Plottable.Dataset(data));#}
+{##}
+{#  var bandPlot = new Plottable.Plots.Rectangle().y(function (d) {#}
+{#    return d.low;#}
+{#  }, yScale).y2(function (d) {#}
+{#    return d.high;#}
+{#  }, yScale).x(function (d) {#}
+{#    return d.x;#}
+{#  }, xScaleBg).attr("fill", function (d) {#}
+{#    return d.stage;#}
+{#  }, colorScale).attr("stroke", function (d) {#}
+{#    return d.stage;#}
+{#  }, colorScale).addDataset(new Plottable.Dataset(thresholds));#}
+{##}
+{#  var yAxis = new Plottable.Axes.Numeric(yScale, "left").formatter(formatter);#}
+{##}
+{#  var group = new Plottable.Components.Group([bandPlot, barPlot]);#}
+{#  var title = new Plottable.Components.TitleLabel(title);#}
+{##}
+{#  return new Plottable.Components.Table([[null, title], [yAxis, group]]);#}
+{#}#}
+{##}
+{#var table = new Plottable.Components.Table([#}
+{#    [#}
+{#        createChart(profitData, profitThresholds, new Plottable.Formatters.percentage(), "Profit"),#}
+{#        createChart(usersData, usersThresholds, new Plottable.Formatters.general(), "Users"),#}
+{#        createChart(salaryData, salaryThresholds, new Plottable.Formatters.currency(0), "Salary"),#}
+{#        createChart(salesData, salesThresholds, new Plottable.Formatters.currency(), "Sales")#}
+{#    ]#}
+{#]);#}
+{##}
+{#table.renderTo("svg#example");#}
+    </script>
+{% endblock %}

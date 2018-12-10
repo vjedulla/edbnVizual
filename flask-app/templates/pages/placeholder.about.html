@@ -1,0 +1,52 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Drawlog* - About{% endblock %}
+{% block content %}
+
+
+<div class="page-header" id="paper">
+    <h1>About the paper</h1>
+
+    <p>
+        ABSTRACT - During the lifetime of a Business Process changes can be
+made to the workflow, the required resources, required documents, . . . .
+Different traces from the same Business Process within a single log file
+can thus differ substantially due to these changes. We propose a method
+that is able to detect concept drift in multivariate log files with a dozen
+attributes. We test our approach on the BPI Challenge 2018 data con-
+sisting of applications for EU direct payment from farmers in Germany
+where we use it to detect Concept Drift. In contrast to other methods
+our algorithm does not require the manual selection of the features used
+to detect drift. Our method first creates a model that captures the re-
+lations between attributes and between events of different time steps.
+This model is then used to score every event and trace. These scores
+can be used to detect outlying cases and concept drift. Thanks to the
+decomposability of the score we are able to perform detailed root-cause
+analysis. <br>
+        Read the paper <a href="#">here</a>.
+    </p>
+
+</div>
+
+<div class="page-header" id="project">
+    <h1>About the project</h1>
+    <p class="">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut tellus ligula, imperdiet id lobortis sit amet,
+        scelerisque non sapien. Duis quis dui quis mauris dapibus fringilla. Pellentesque nec tellus ac diam volutpat malesuada.
+    </p>
+</div>
+
+<div class="page-header" id="authors">
+    <h1>About the authors</h1>
+
+    <ul>
+        <li>Toon Calders - Project Promoter</li>
+        <li>Stephen Pauwels - Paper author</li>
+        <li>Armando Alliu - Visualisation</li>
+    </ul>
+</div>
+
+
+
+<p class="">In quam arcu, interdum vel arcu viverra, vulputate convallis massa. Sed hendrerit velit a arcu euismod, sit amet consequat lacus imperdiet. Nullam quis dui sapien. Vestibulum placerat, justo non fringilla laoreet, dui ipsum posuere nisi, nec vestibulum eros leo ut sapien.</p>
+
+{% endblock %}

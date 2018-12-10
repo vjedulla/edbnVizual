@@ -1,0 +1,26 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Drawlog* - Home{% endblock %}
+{% block content %}
+
+<!-- Jumbotron Header -->
+<header class="jumbotron my-4 text-center">
+
+<div class="">
+    <img class="img-responsive antwerp-logo"  src="/static/img/Uantwerpen-EN-Color.png" alt="university of antwerp logo">
+    <img class="img-responsive adrem-logo"  src="/static/img/adrem_logo.gif" alt="adrem group">
+</div>
+
+<h1 class="display-4">Concept Drift visualization</h1>
+<p class="smaller-width">
+    Creating visualisations for Concept Drifts by Stephen Pauwels.
+    Read about the <a href="{{ url_for('about') }}#paper">paper</a>, <a href="{{ url_for('about') }}#project">project</a> and
+    <a href="{{ url_for('about') }}#authors">authors</a>.
+    This code is property of University of Antwerp (ADReM group).
+</p>
+
+
+<a href="{{ url_for('application') }}" class="btn btn-primary btn-lg">Go to application!</a>
+
+</header>
+
+{% endblock %}

@@ -1,0 +1,423 @@
+{% extends 'layouts/main.html' %}
+{% block title %}Drawlog* - Application{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Drawlog* Application</h1>
+</div>
+
+<div class="row">
+    <section>
+        <div class="wizard">
+            <div class="wizard-inner">
+                <div class="connecting-line"></div>
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#step3" data-toggle="tab" class="networkModel" aria-controls="step3" role="tab" title="Configure model">
+                            <span class="round-tab">
+                                <i class="fas fa-atom"></i>
+                            </span>
+                        </a>
+                    </li>
+
+                    <li role="presentation">
+                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Run analysis">
+                            <span class="round-tab">
+                                <i class="far fa-chart-bar"></i>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="tab-content">
+                <div class="tab-pane active" role="tabpanel" id="step3">
+                    <h3>Configure model</h3>
+                    <p>
+                        Below there is the model learned from
+                        the eDBN.
+                    </p>
+
+                    <div class="col-md-12">
+                        <div class="graph-toolbox">
+                            <div class="toolbox-bar">
+                                <div class="helper-box">
+
+                                    <ul>
+                                        <li>On Edit mode:</li>
+                                        <li>Double click to create new node.</li>
+                                        <li>Click two nodes to link them (directed).</li>
+                                        <li>Double click an edge to delete it.</li>
+                                    </ul>
+
+                                </div>
+                                <div class="button-toolbox helper-button">
+                                    <i class="far fa-question-circle"></i>
+                                    Helper
+                                </div>
+                                <div class="button-toolbox back-button">
+                                    <i class="fas fa-undo"></i>
+                                    Undo
+                                </div>
+                                <div class="button-toolbox resize-button">
+                                    <i class="fas fa-compass"></i>
+                                    Resize
+                                </div>
+                                <div class="button-toolbox redo-button">
+                                    <i class="fas fa-redo-alt"></i>
+                                    Redo
+                                </div>
+                                <input type="checkbox" id="switch-button-checkbox" data-toggle="toggle" data-on="Edit mode" data-off="View mode" data-style="width_extend button-toolbox switch-button" data-onstyle="danger my-red" data-offstyle="primary my-blue">
+                            </div>
+
+                            <div id="cy">
+{#                                <div class="btn btn-sm btn-primary">Test</div>#}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <h4>Configure parameters</h4>
+
+                        <div class="slider-group">
+                            <div class="form-group">
+                                Alpha (α)
+                                <input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                            </div>
+
+                            <div class="form-group">
+                                Beta (β)
+                                <input id="ex2" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                            </div>
+
+                            <div class="form-group">
+                                Gamma (γ)
+                                <input id="ex3" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                            </div>
+
+                            <div class="form-group">
+                                Sigma (σ)
+                                <input id="ex4" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                            </div>
+
+                            <div class="form-group">
+                                Theta (θ)
+                                <input id="ex5" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="20" data-slider-step="1" data-slider-value="14"/>
+                            </div>
+
+                            <div class="form-group">
+                                Threshold (ε) <b>10</b> <input id="ex6" type="text" class="span2" value="" data-slider-min="10" data-slider-max="1000" data-slider-step="5" data-slider-value="[250,450]"/> <b>1000</b>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default prev-step">Previous</button>
+                        <button type="button" class="btn btn-primary next-step pull-right">Continue</button>
+                    </div>
+                </div>
+                <div class="tab-pane" role="tabpanel" id="complete">
+                    <h3>Current run</h3>
+
+
+                    <div class="card">
+                        <div class="tags">#tag1 #tag2</div>
+                        <div class="name">Name</div>
+                        <div class="dataset">data.csv</div>
+                        <div class="authors">by Armando, Sandy, Test</div>
+                        <div class="helper noselect">
+                            <label for="info">
+                                <i class="fas fa-info"></i>
+                            </label>
+                            <input type="checkbox" name="info" id="info">
+                        </div>
+                        <div class="show-more">
+                            <div class="network">show network</div>
+                            <div class="notes">Notes...</div>
+                            <div class="parameters">alpha: 15, beta: 17</div>
+                        </div>
+                    </div>
+
+                    <h3>Queue of older runs</h3>
+
+                    <div class="card older">
+                        <div class="tags">#tag1 #tag2</div>
+                        <div class="name">Name</div>
+                        <div class="dataset">data.csv</div>
+                        <div class="authors">by Armando, Sandy, Test</div>
+                        <div class="helper noselect">
+                            <label for="info">
+                                <i class="fas fa-info"></i>
+                            </label>
+                            <input type="checkbox" name="info" id="info">
+                        </div>
+                        <div class="show-more">
+                            <div class="network">show network</div>
+                            <div class="notes">Notes...</div>
+                            <div class="parameters">alpha: 15, beta: 17</div>
+                        </div>
+                    </div>
+
+                    <div class="card older">
+                        <div class="tags">#tag1 #tag2</div>
+                        <div class="name">Name</div>
+                        <div class="dataset">data.csv</div>
+                        <div class="authors">by Armando, Sandy, Test</div>
+                        <div class="helper noselect">
+                            <label for="info">
+                                <i class="fas fa-info"></i>
+                            </label>
+                            <input type="checkbox" name="info" id="info">
+                        </div>
+                        <div class="show-more">
+                            <div class="network">show network</div>
+                            <div class="notes">Notes...</div>
+                            <div class="parameters">alpha: 15, beta: 17</div>
+                        </div>
+                    </div>
+
+                    <div class="card older">
+                        <div class="tags">#tag1 #tag2</div>
+                        <div class="name">Name</div>
+                        <div class="dataset">data.csv</div>
+                        <div class="authors">by Armando, Sandy, Test</div>
+                        <div class="helper noselect">
+                            <label for="info">
+                                <i class="fas fa-info"></i>
+                            </label>
+                            <input type="checkbox" name="info" id="info">
+                        </div>
+                        <div class="show-more">
+                            <div class="network">show network</div>
+                            <div class="notes">Notes...</div>
+                            <div class="parameters">alpha: 15, beta: 17</div>
+                        </div>
+                    </div>
+
+
+{#                        <div class="col-md-4">#}
+{#                            <div class="name-show"></div>#}
+{#                            <div class="author-show"></div>#}
+{#                            <div class="dataset-show"></div> <div class="alias-show"></div>#}
+{#                        </div>#}
+{#                        <div class="col-md-4">#}
+{#                            <div class="note-show"></div>#}
+{#                            <div class="tags-show"></div>#}
+{#                            <div class="parameters-show"></div>#}
+{#                        </div>#}
+{#                        <div class="col-md-4">#}
+{#                            (modified/as-is)#}
+{#                        </div>#}
+
+
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+        </div>
+    </section>
+</div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+
+        $(document).ready(function () {
+
+
+            /*
+            * INITIALIZATION
+            * */
+            var cy = cytoscape({
+                container: document.getElementById('cy'),
+
+                boxSelectionEnabled: false,
+                autounselectify: true,
+
+                style: cytoscape.stylesheet()
+                    .selector('node')
+                    .css({
+                        'content': 'data(id)',
+                        'shape': 'ellipse'
+                    })
+                    .selector('edge')
+                    .css({
+                        'curve-style': 'bezier',
+                        'target-arrow-shape': 'triangle',
+                        'width': 2,
+                        'line-color': '#ddd',
+                        'target-arrow-color': '#ddd'
+                    })
+                    .selector('.highlighted')
+                    .css({
+                        'background-color': '#61bffc',
+                        'line-color': '#61bffc',
+                        'target-arrow-color': '#61bffc',
+                        'transition-property': 'background-color, line-color, target-arrow-color',
+                        'transition-duration': '0.1s'
+                    }),
+
+                elements: {
+                    nodes: [
+                        {% for n in network.model.raw_nodes %}
+                            { data: { id: '{{ n }}' } },
+                        {% endfor %}
+                    ],
+
+                    edges: [
+                        {% for s, d in network.model.raw_edges %}
+                            { data: { id: '{{ s+d }}', weight: 1, source: '{{ s }}', target: '{{ d }}' } },
+                        {% endfor %}
+                    ]
+                },
+
+                layout: {
+                    name: 'breadthfirst',
+                    directed: true,
+                    animate: false,
+                    roots: '#a',
+                    padding: 20,
+                    fit: true,
+                    animationDuration: 100
+                }
+            });
+
+            /*
+            * Create dynamically
+            * */
+            for(var i=1; i <= 6; i++) {
+                $('#ex' + i).slider({
+                    formatter: function (value) {
+                        return 'Current value: ' + value;
+                    }
+                });
+            }
+
+            /*
+            * RESIZE PROBLEM FIX
+            * */
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                cy.resize();
+                cy.center();
+            });
+
+            $('.resize-button').on('click', function () {
+                cy.reset();
+                cy.center();
+            });
+
+            $('.helper-button').on('click', function () {
+                $('.helper-box').toggle('can_see');
+            });
+
+
+
+            /*
+            * EMIT doubletap event
+            * */
+            var doubleClickDelayMs = 350;
+            var previousTapStamp;
+
+            cy.on('tap', function(e) {
+                var currentTapStamp = e.timeStamp;
+                var msFromLastTap = currentTapStamp - previousTapStamp;
+
+                if (msFromLastTap < doubleClickDelayMs && isEditMode()) {
+                    e.target.trigger('doubleTap', e);
+                }
+                previousTapStamp = currentTapStamp;
+            });
+
+
+            /*
+            * Highlight a node
+            * */
+            cy.on('click', 'node', function (evt) {
+                if (evt.target.isNode()) {
+                    cy.$('#' + evt.target.id()).toggleClass('highlighted');
+                }
+            });
+
+            var conectivity_state = [];
+
+            /*
+            * Remove Highlight when clicking background
+            * */
+            cy.on('tap', function (event) {
+
+                if (event.target === cy) {
+                    clearSelectedNodes();
+                    return;
+                }
+
+                if(! isEditMode()) return;
+
+                if (event.target.isNode()) {
+                    var currElement = event.target.id();
+
+                    var idNum = cy.edges().size(),
+                        setID = idNum.toString();
+
+
+                    if (conectivity_state.length === 0) {
+                        conectivity_state.push(
+                            currElement
+                        );
+                        // console.log(conectivity_state);
+                    } else {
+                        var prevElement = conectivity_state.pop();
+                        var valid = cy.edges("[id = '" + prevElement + currElement + "']").length === 0;
+
+                        if (valid) {
+                            cy.add({
+                                group: "edges", data: {
+                                    id: prevElement + currElement,
+                                    source: prevElement, target: currElement
+                                }
+                            });
+                        }
+
+
+                        clearSelectedNodes();
+                    }
+                }
+
+            });
+
+
+
+            /*
+            * Create new node on double click
+            * */
+            cy.on('doubleTap', function(event, originalTapEvent) {
+                if(! isEditMode()) return;
+                if(event.target.isEdge()){
+                    var edge = event.target.id();
+                    var collection = cy.elements("edge[id = '"+edge+"']");
+                    cy.remove(collection)
+                }
+            });
+
+
+            function clearSelectedNodes() {
+                cy.nodes().forEach(function (ele) {
+                        cy.$('#' + ele.id()).removeClass('highlighted');
+                });
+
+                conectivity_state.splice(0, conectivity_state.length);
+            }
+
+            function isEditMode() {
+                return $('#switch-button-checkbox').is(":checked");
+            }
+
+    });
+    </script>
+{#    <script type="text/javascript" src="/static/js/network.js"></script>#}
+{% endblock %}
