@@ -4,23 +4,29 @@
 
 
 <div class="page-header" id="paper">
-    <h1>Queue</h1>
+    <h1>Experiments</h1>
 </div>
 
     <div class="queues">
     {% for q in all_queued %}
         <div class="card">
+            <div class="pseudo-before-elem"></div>
+
             <div class="tags">{{ q.experiment.tags|print_tags }}</div>
             <div class="name">{{ q.experiment.name }}</div>
             <div class="dataset">{{ q.experiment.data_file_path }}</div>
             <div class="authors">by {{ q.experiment.authors|join(', ', attribute="author") }}</div>
             <div><a href="/show_network/{{ q.experiment.id }}">Show network</a></div>
-            <div>status: {{ q.status }}</div>
+
             <div class="play">
                 <i class="fas fa-play"></i>
             </div>
 
             <input type="checkbox" name="info" id="info">
+
+            <div class="helper no-popup bottom-right-placement delete-experiment noselect" data-id="{{ q.id }}">
+                <i class="fas fa-trash-alt"></i>
+            </div>
 
             <div class="helper noselect">
                 <label for="info">
@@ -29,13 +35,55 @@
             </div>
 
             <div class="show-more">
-                <div class="start">Start: {{q.experiment.queued_at}}</div>
-                <div class="start">End: {{q.experiment.queued_end}}</div>
+                <div class="start">Start: {{ moment(q.experiment.queued_at).fromNow() }}</div>
+                <div class="start">End: {{ moment(q.experiment.queued_end).fromNow() }}</div>
                 <div class="notes">Notes: {{ q.experiment.notes }}</div>
                 <div class="parameters">Alias: {{ q.experiment.alias }}</div>
+
+                {% if q.status == 1 %}
+                    <div>status: DONE</div>
+                {% elif q.status == 2 %}
+                    <div>status: In Progress</div>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
+
+
+    {% block js %}
+        <script>
+            $('.delete-experiment').on('click', function (e) {
+                var queue_id = $(this).attr("data-id");
+                var url = "/experiment/delete";
+
+                swal({
+                    title: 'Delete experiment?',
+                    text: "You won't be able to revert this!",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.value) {
+                        $.ajax({
+                            type: "POST",
+                            url: url,
+                            data: {"queue-id": queue_id},
+                            success: function () {
+                                swal(
+                                    'Deleted!',
+                                    'Your file has been deleted.',
+                                    'success'
+                                );
+                            }
+                        });
+
+                    }
+                })
+            })
+        </script>
+    {% endblock %}
 
 {#        <div class="card older">#}
 {#            <div class="tags">#tag1 #tag2</div>#}

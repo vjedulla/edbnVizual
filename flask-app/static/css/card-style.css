@@ -16,7 +16,7 @@
   margin-bottom: 10px;
 }
 
-.card.older:before{
+.card.older .pseudo-before-elem{
   background: #eec5c5;
 }
 
@@ -24,7 +24,7 @@
   background: #99b2cb;
 }
 
-.card:before {
+.card .pseudo-before-elem {
   content: '';
   position: absolute;
   background: #c9302c;
@@ -41,7 +41,7 @@
   transition: width 0.2s;
 }
 
-.card:hover:before{
+.card:hover .pseudo-before-elem{
   width: 60px;
 }
 
@@ -103,22 +103,31 @@
   z-index: 5;
 }
 
-.helper:hover{
-  background: #dddddd;
+.helper.no-popup{
+  bottom: -10px;
+  top: auto;
+  right: -10px;
+  background: #c9302c;
+  color: whitesmoke;
+  border-color: #c9302c;
 }
 
 .helper:hover{
+  background: #dddddd;
   color: #004566;
 }
 
-.helper:hover + .show-more{
+.helper.no-popup:hover{
+  background: #85211e;
+  color: whitesmoke;
+}
+
+
+.helper:not(no-popup):hover + .show-more{
   opacity: 1;
   pointer-events: auto;
 }
 
-.helper .show-more{
-
-}
 
 #info{
   display: none;

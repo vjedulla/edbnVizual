@@ -107,17 +107,24 @@ def generate_model(data, remove_attrs = []):
             print(relation[0], "->", relation[1])
 
 
-    rn = []
-    re = []
+    raw_nodes = []
+    raw_CD = []
+    raw_FD = []
 
-    for n in net.nodes():
-        rn.append(n)
+    for node in nodes:
+        raw_nodes.append(node)
 
-    for e in net.edges():
-        re.append(e)
+    for conditional_dependencie in relations:
+        raw_CD.append(conditional_dependencie)
 
-    cbn.raw_nodes = rn
-    cbn.raw_edges = re
+
+    for functional_dependencies in mappings:
+        raw_FD.append(functional_dependencies)
+
+
+    cbn.raw_nodes = raw_nodes
+    cbn.raw_CD = raw_CD
+    cbn.raw_FD = raw_FD
 
     # print([n for n in net.nodes()])
     # print([e for e in net.edges()])

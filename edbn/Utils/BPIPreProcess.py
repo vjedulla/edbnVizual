@@ -28,7 +28,7 @@ def read_raw_file(file):
             line_split = line.split(",")
             date_parse = line_split[3].strip('\n')
 
-            date = datetime.datetime.strptime(date_parse, "%m/%d/%y %H:%M:%S")
+            date = datetime.datetime.strptime(date_parse, "%y/%m/%d %H:%M:%S")
 
             # MANDO ADD: added unix timestamp
             # unixtime = int(time.mktime(date.timetuple()))
@@ -160,6 +160,9 @@ def preProcessData(path_to_data):
         train = path_to_data + "BPIC15_train_" + str(i) + ".csv"
         test = path_to_data + "BPIC15_test_" + str(i) + ".csv"
         write_to_file(train, test, read_raw_file(path_to_data + "BPIC15_" + str(i) + "_sorted.csv"))
+
+def get_constructed_file(base_file, type='train'):
+    return base_file[:-4] + "_{}_preprocessed.csv".format(type)
 
 def preProcessFile(path_to_file, output_directory=None):
     parts = path_to_file.split("/")

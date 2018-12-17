@@ -1,0 +1,28 @@
+#status-checker{
+    list-style: none;
+    padding: 0;
+    color: #686868;
+    width: 70%;
+    margin: 10px auto;
+}
+
+#status-checker li.done:before{
+    /*position: absolute;*/
+    /*left: -10px;*/
+    /*top: 0;*/
+    content: '\f058';
+    font-family: FontAwesome;
+    color: #52AE3E;
+    margin-right: 20px;
+}
+
+#status-checker li.done{
+    position: relative;
+    color: #52AE3E;
+}
+
+.current-status{
+    font-size: 15px;
+    color: #181818;
+    margin: 10px;
+}

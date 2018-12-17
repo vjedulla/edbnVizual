@@ -20,8 +20,8 @@
                         </a>
                     </li>
 
-                    <li role="presentation">
-                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Run analysis">
+                    <li role="presentation" class="disabled">
+                        <a href="#complete" data-toggle="tab" aria-controls="complete" role="tab" title="Analysis">
                             <span class="round-tab">
                                 <i class="far fa-chart-bar"></i>
                             </span>
@@ -110,109 +110,39 @@
                             </div>
                         </div>
 
-
-
                     </div>
 
 
                     <div class="col-md-12">
-                        <button type="button" class="btn btn-default prev-step">Previous</button>
-                        <button type="button" class="btn btn-primary next-step pull-right">Continue</button>
+                        <button type="button" class="btn btn-primary analyze pull-right">Continue</button>
                     </div>
                 </div>
                 <div class="tab-pane" role="tabpanel" id="complete">
-                    <h3>Current run</h3>
+                    <h3>Scoring</h3>
+                    <p>Plot to show the scores of each trace. Click on a trace!</p>
 
+                    <svg id="example" style="height: 500px"></svg>
 
-                    <div class="card">
-                        <div class="tags">#tag1 #tag2</div>
-                        <div class="name">Name</div>
-                        <div class="dataset">data.csv</div>
-                        <div class="authors">by Armando, Sandy, Test</div>
-                        <div class="helper noselect">
-                            <label for="info">
-                                <i class="fas fa-info"></i>
-                            </label>
-                            <input type="checkbox" name="info" id="info">
-                        </div>
-                        <div class="show-more">
-                            <div class="network">show network</div>
-                            <div class="notes">Notes...</div>
-                            <div class="parameters">alpha: 15, beta: 17</div>
-                        </div>
-                    </div>
-
-                    <h3>Queue of older runs</h3>
-
-                    <div class="card older">
-                        <div class="tags">#tag1 #tag2</div>
-                        <div class="name">Name</div>
-                        <div class="dataset">data.csv</div>
-                        <div class="authors">by Armando, Sandy, Test</div>
-                        <div class="helper noselect">
-                            <label for="info">
-                                <i class="fas fa-info"></i>
-                            </label>
-                            <input type="checkbox" name="info" id="info">
-                        </div>
-                        <div class="show-more">
-                            <div class="network">show network</div>
-                            <div class="notes">Notes...</div>
-                            <div class="parameters">alpha: 15, beta: 17</div>
-                        </div>
-                    </div>
-
-                    <div class="card older">
-                        <div class="tags">#tag1 #tag2</div>
-                        <div class="name">Name</div>
-                        <div class="dataset">data.csv</div>
-                        <div class="authors">by Armando, Sandy, Test</div>
-                        <div class="helper noselect">
-                            <label for="info">
-                                <i class="fas fa-info"></i>
-                            </label>
-                            <input type="checkbox" name="info" id="info">
-                        </div>
-                        <div class="show-more">
-                            <div class="network">show network</div>
-                            <div class="notes">Notes...</div>
-                            <div class="parameters">alpha: 15, beta: 17</div>
-                        </div>
-                    </div>
-
-                    <div class="card older">
-                        <div class="tags">#tag1 #tag2</div>
-                        <div class="name">Name</div>
-                        <div class="dataset">data.csv</div>
-                        <div class="authors">by Armando, Sandy, Test</div>
-                        <div class="helper noselect">
-                            <label for="info">
-                                <i class="fas fa-info"></i>
-                            </label>
-                            <input type="checkbox" name="info" id="info">
-                        </div>
-                        <div class="show-more">
-                            <div class="network">show network</div>
-                            <div class="notes">Notes...</div>
-                            <div class="parameters">alpha: 15, beta: 17</div>
-                        </div>
-                    </div>
-
-
-{#                        <div class="col-md-4">#}
-{#                            <div class="name-show"></div>#}
-{#                            <div class="author-show"></div>#}
-{#                            <div class="dataset-show"></div> <div class="alias-show"></div>#}
-{#                        </div>#}
-{#                        <div class="col-md-4">#}
-{#                            <div class="note-show"></div>#}
-{#                            <div class="tags-show"></div>#}
-{#                            <div class="parameters-show"></div>#}
-{#                        </div>#}
-{#                        <div class="col-md-4">#}
-{#                            (modified/as-is)#}
-{#                        </div>#}
-
+                    <div id="toolbar">
+  <button id="remove" class="btn btn-danger" disabled>
+    <i class="glyphicon glyphicon-remove"></i> Delete
+  </button>
+</div>
+<table id="table"
+       data-toolbar="#toolbar"
+       data-search="true"
+       data-show-refresh="true"
+       data-show-toggle="true"
+       data-show-columns="true"
+       data-show-export="true"
+       data-detail-view="true"
+       data-minimum-count-columns="2"
+       data-show-pagination-switch="true"
+       data-pagination="true"
+       data-id-field="id"
+       data-page-list="[10, 25, 50, 100, ALL]"
+       >
+</table>
 
                 </div>
                 <div class="clearfix"></div>
@@ -225,199 +155,41 @@
 
 {% endblock %}
 
-{% block js %}
-    <script>
+{% block css %}
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.2/bootstrap-table.min.css">
+{% endblock %}
 
+{% block js %}
+    <script type="text/javascript" src="/static/js/networkFn.js"></script>
+    <script type="text/javascript" src="/static/js/undo-redo.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+    !-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.12.2/bootstrap-table.min.js"></script>
+
+    <script>
         $(document).ready(function () {
 
-
-            /*
-            * INITIALIZATION
-            * */
-            var cy = cytoscape({
-                container: document.getElementById('cy'),
-
-                boxSelectionEnabled: false,
-                autounselectify: true,
-
-                style: cytoscape.stylesheet()
-                    .selector('node')
-                    .css({
-                        'content': 'data(id)',
-                        'shape': 'ellipse'
-                    })
-                    .selector('edge')
-                    .css({
-                        'curve-style': 'bezier',
-                        'target-arrow-shape': 'triangle',
-                        'width': 2,
-                        'line-color': '#ddd',
-                        'target-arrow-color': '#ddd'
-                    })
-                    .selector('.highlighted')
-                    .css({
-                        'background-color': '#61bffc',
-                        'line-color': '#61bffc',
-                        'target-arrow-color': '#61bffc',
-                        'transition-property': 'background-color, line-color, target-arrow-color',
-                        'transition-duration': '0.1s'
-                    }),
-
-                elements: {
-                    nodes: [
+            var nodes = [
                         {% for n in network.model.raw_nodes %}
                             { data: { id: '{{ n }}' } },
                         {% endfor %}
-                    ],
+                    ];
 
-                    edges: [
-                        {% for s, d in network.model.raw_edges %}
-                            { data: { id: '{{ s+d }}', weight: 1, source: '{{ s }}', target: '{{ d }}' } },
-                        {% endfor %}
-                    ]
-                },
+            var conditional_dependencies = [
+                {% for s, d in network.model.raw_CD %}
+                    { data: { id: '{{ s+d }}', weight: 1, source: '{{ s }}', target: '{{ d }}' } },
+                {% endfor %}
+            ];
 
-                layout: {
-                    name: 'breadthfirst',
-                    directed: true,
-                    animate: false,
-                    roots: '#a',
-                    padding: 20,
-                    fit: true,
-                    animationDuration: 100
-                }
-            });
+            var functional_dependencies = [
+                {% for s, d in network.model.raw_FD %}
+                    { data: { id: '{{ s+d }}', weight: 2, source: '{{ s }}', target: '{{ d }}' } },
+                {% endfor %}
+            ];
 
-            /*
-            * Create dynamically
-            * */
-            for(var i=1; i <= 6; i++) {
-                $('#ex' + i).slider({
-                    formatter: function (value) {
-                        return 'Current value: ' + value;
-                    }
-                });
-            }
-
-            /*
-            * RESIZE PROBLEM FIX
-            * */
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                cy.resize();
-                cy.center();
-            });
-
-            $('.resize-button').on('click', function () {
-                cy.reset();
-                cy.center();
-            });
-
-            $('.helper-button').on('click', function () {
-                $('.helper-box').toggle('can_see');
-            });
-
-
-
-            /*
-            * EMIT doubletap event
-            * */
-            var doubleClickDelayMs = 350;
-            var previousTapStamp;
-
-            cy.on('tap', function(e) {
-                var currentTapStamp = e.timeStamp;
-                var msFromLastTap = currentTapStamp - previousTapStamp;
-
-                if (msFromLastTap < doubleClickDelayMs && isEditMode()) {
-                    e.target.trigger('doubleTap', e);
-                }
-                previousTapStamp = currentTapStamp;
-            });
-
-
-            /*
-            * Highlight a node
-            * */
-            cy.on('click', 'node', function (evt) {
-                if (evt.target.isNode()) {
-                    cy.$('#' + evt.target.id()).toggleClass('highlighted');
-                }
-            });
-
-            var conectivity_state = [];
-
-            /*
-            * Remove Highlight when clicking background
-            * */
-            cy.on('tap', function (event) {
-
-                if (event.target === cy) {
-                    clearSelectedNodes();
-                    return;
-                }
-
-                if(! isEditMode()) return;
-
-                if (event.target.isNode()) {
-                    var currElement = event.target.id();
-
-                    var idNum = cy.edges().size(),
-                        setID = idNum.toString();
-
-
-                    if (conectivity_state.length === 0) {
-                        conectivity_state.push(
-                            currElement
-                        );
-                        // console.log(conectivity_state);
-                    } else {
-                        var prevElement = conectivity_state.pop();
-                        var valid = cy.edges("[id = '" + prevElement + currElement + "']").length === 0;
-
-                        if (valid) {
-                            cy.add({
-                                group: "edges", data: {
-                                    id: prevElement + currElement,
-                                    source: prevElement, target: currElement
-                                }
-                            });
-                        }
-
-
-                        clearSelectedNodes();
-                    }
-                }
-
-            });
-
-
-
-            /*
-            * Create new node on double click
-            * */
-            cy.on('doubleTap', function(event, originalTapEvent) {
-                if(! isEditMode()) return;
-                if(event.target.isEdge()){
-                    var edge = event.target.id();
-                    var collection = cy.elements("edge[id = '"+edge+"']");
-                    cy.remove(collection)
-                }
-            });
-
-
-            function clearSelectedNodes() {
-                cy.nodes().forEach(function (ele) {
-                        cy.$('#' + ele.id()).removeClass('highlighted');
-                });
-
-                conectivity_state.splice(0, conectivity_state.length);
-            }
-
-            function isEditMode() {
-                return $('#switch-button-checkbox').is(":checked");
-            }
-
+            initializeCY(nodes, conditional_dependencies, functional_dependencies);
     });
     </script>
-{#    <script type="text/javascript" src="/static/js/network.js"></script>#}
 {% endblock %}

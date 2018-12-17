@@ -2,33 +2,38 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request, flash, redirect, url_for, abort
+from flask import Flask, render_template, request, flash, redirect, url_for, abort, jsonify
 # from flask.ext.sqlalchemy import SQLAlchemy
-from flask_sqlalchemy import SQLAlchemy
 from flask import Flask, render_template
 from logging import Formatter, FileHandler
 import logging
 from werkzeug.utils import secure_filename
 import os
-import time
-from flask import jsonify
+from flask_moment import Moment
+import flask, eventlet
 import queueing
+import datetime
+from flask_sqlalchemy import SQLAlchemy
+from flask_socketio import SocketIO
+from flask_socketio import send, emit
+import time
+import threading
 
 #----------------------------------------------------------------------------#
 # App Config.
 #----------------------------------------------------------------------------#
 
 app = Flask(__name__)
+moment = Moment(app)
+socketio = SocketIO(app, async_mode="eventlet")
+
 app.config.from_object('config')
 queue = None
 
-ALLOWED_EXTENSIONS = set(['txt', 'csv'])
+ALLOWED_EXTENSIONS = {'txt', 'csv'}
 
-# app.config['TRAP_HTTP_EXCEPTIONS'] = True
 
 db = SQLAlchemy(app)
-
-# Automatically tear down SQLAlchemy.
 
 # @app.teardown_request
 # def shutdown_session(exception=None):
@@ -84,7 +89,6 @@ def testing():
     return render_template('pages/placeholder.scores.html', result=solved)
 
 
-
 @app.route('/show_network/<int:id>')
 def show_network(id=1):
     from models import Experiment
@@ -96,17 +100,61 @@ def show_network(id=1):
 
     print(show)
     print(show.model.raw_nodes)
-    print(show.model.raw_edges)
+    print(show.model.raw_CD)
+    print(show.model.raw_FD)
+
     return render_template('pages/placeholder.show_network.html', network=show)
+
+def message_wrapper(where, data):
+    emit(where, data)
+    eventlet.sleep()
+
+@socketio.on('score_model')
+def score_network(data):
+    id = data['which_network']
+
+    @flask.copy_current_request_context
+    def background_thread(id):
+        from models import Experiment
+        from worker import train_and_score
+
+        show = Experiment.query.get(id)
+
+        if show is None:
+            # emit("score_resp", {'status': "Error! No experiment with that ID!"})
+            return redirect(url_for('queue'))
+
+        model = show.model
+        alias = show.alias
+        filename = show.data_file_path
+
+        steps = {
+            "Preparing to train variables": 1,
+            "Data loaded": 2,
+            "Build K-Context for data": 3,
+            "Finished training data": 4,
+            "Finished testing": 5,
+            "Preparing scoring": 6,
+            "Finished scoring": 7,
+            "Finished": 8
+        }
+
+        scores = train_and_score(model, alias, filename, message_wrapper)
+        message_wrapper("score_resp", {'step': 8, "msg": "Finished!", "scores": scores})
+
+        # redirect with data
+        # https://stackoverflow.com/questions/17057191/redirect-while-passing-arguments
+        return redirect(url_for('queue'))
+
+    thread = socketio.start_background_task(background_thread, id)
 
 
 @app.route('/queue')
 def queue():
-    from models import Experiment, Queue
-
+    from models import Queue
     all_queued = Queue.query.all()
 
-    return render_template('pages/placeholder.queue.html', all_queued=all_queued)
+    return render_template('pages/placeholder.queue.html', all_queued=all_queued, datetimes=None)
 
 
 @app.route('/application')
@@ -115,11 +163,34 @@ def application():
     # return redirect(url_for('home'))
     return render_template('pages/placeholder.application.html')
 
+@app.route('/experiment/delete', methods=['POST'])
+def delete_experiment():
+    from models import Experiment, Queue, Tag, Author
+    id = request.form['queue-id']
+
+    queue = Queue.query.get(id)
+    experiment = queue.experiment
+    experiment_id = experiment.id
+
+    if queue is None:
+        # flash("An error occurred!", category="danger")
+        return redirect(url_for('queue'))
+
+    # if you delete using the query(X).filter(<cond>).delete()
+    # will delete rows. whereas the code below will use the
+    # cascading options
+    q = db.session.query(Queue).filter(Queue.id == id).first()
+    db.session.delete(q)
+    u = db.session.query(Experiment).filter(Experiment.id == experiment_id).first()
+    db.session.delete(u)
+    db.session.commit()
+
+    return redirect(url_for('queue'))
+
 
 @app.route('/submit_to_queue', methods=['POST'])
 def log_file_analyse():
     from models import Experiment, Queue
-
     print("Name:", request.form['name-input'])
     print("Tags:", request.form['tags-input'])
     print("Notes", request.form['name-input'])
@@ -146,6 +217,7 @@ def log_file_analyse():
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
+    print("here")
     e = Experiment(name=name, data_file_path=filename, authors=authors, tags=tags, notes=notes, alias=alias)
     q = Queue(e)
 
@@ -153,13 +225,10 @@ def log_file_analyse():
     db.session.add(q)
 
     db.session.commit()
-
+    print("New task")
     queue.create_new_task(q)
 
     return redirect(url_for('queue'))
-    # return jsonify({
-    #     'status': 'ok'
-    # })
 
 
 def allowed_file(filename):

@@ -2,43 +2,31 @@ from sqlalchemy import create_engine, Table, Column
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Enum
+from sqlalchemy.pool import SingletonThreadPool
 from app import db
 import datetime
 
-engine = create_engine('sqlite:///flask-app/database/database.db', echo=True)
+engine = create_engine('sqlite:///flask-app/database/database.db', connect_args={'check_same_thread': False}, poolclass=SingletonThreadPool)
 
-db_session = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
+db_session = scoped_session(sessionmaker(
+                                    # autocommit=False,
+                                    # autoflush=False,
+                                    bind=engine
+))
+
 Base = declarative_base()
 Base.query = db_session.query_property()
 
 
-
-
-# Set your classes here.
-# class Test(Base):
-#     __tablename__ = 'Test'
-#
-#     id = db.Column(db.Integer, primary_key=True)
-#     name = db.Column(db.String(120), unique=True)
-#
-#     def __init__(self, name=None):
-#         self.name = name
-#
-#     def __repr__(self):
-#         return '<Test %r>' % (self.name)
-
-
-
+# Classes
 experiment_author_table = db.Table('author_experiment', Base.metadata,
-    db.Column('exp_id', db.Integer, db.ForeignKey('experiments.id')),
-    db.Column('auth_id', db.Integer, db.ForeignKey('authors.id'))
+    db.Column('exp_id', db.Integer, db.ForeignKey('experiments.id', ondelete="CASCADE")),
+    db.Column('auth_id', db.Integer, db.ForeignKey('authors.id', ondelete="CASCADE"))
 )
 
 experiment_tags_table = db.Table('experiments_tag', Base.metadata,
-    db.Column('exp_id', db.Integer, db.ForeignKey('experiments.id')),
-    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'))
+    db.Column('exp_id', db.Integer, db.ForeignKey('experiments.id', ondelete="CASCADE")),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id', ondelete="CASCADE"))
 )
 
 class Tag(Base):
@@ -90,13 +78,16 @@ class Experiment(Base):
     authors = db.relationship(
         "Author",
         secondary=experiment_author_table,
-        back_populates="experiments"
+        back_populates="experiments",
+        cascade="all,delete"
     )
 
     tags = db.relationship(
         "Tag",
         secondary=experiment_tags_table,
-        back_populates="experiments")
+        back_populates="experiments",
+        cascade="all,delete"
+    )
 
     model = db.Column(db.PickleType(), nullable=True)
     parameters = db.Column(db.PickleType(), nullable=True)
@@ -129,12 +120,17 @@ class Experiment(Base):
     #     self.data_file_path = data_file_path
     #     self.queued_at = queued_at  # datetime
 
-    def __init__(self, name=None, data_file_path=None, authors=None, tags=None, notes='default', alias='no-alias'):
+    def __init__(self, name=None, data_file_path=None, authors=None, tags=None, notes='default', alias='no-alias',
+                queued_at=None, queued_end=None, model=None):
         self.name = name
         self.data_file_path = data_file_path
 
         self.notes = notes
         self.alias = alias
+
+        self.queued_at = queued_at
+        self.queued_end = queued_end
+        self.model = model
 
         if authors is not None and isinstance(authors[0], Author):
             self.add_all_authors(authors)

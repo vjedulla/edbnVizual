@@ -63,7 +63,8 @@ class extendedDynamicBayesianNetwork():
         self.trace_attr = trace_attr
 
         self.raw_nodes = []
-        self.raw_edges = []
+        self.raw_FD = []
+        self.raw_CD = []
 
     def add_variable(self, name, new_values):
         self.variables[name] = Variable(name, new_values, self.num_attrs)

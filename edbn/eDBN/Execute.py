@@ -6,6 +6,10 @@ import eDBN.GenerateModel as gm
 
 def train(data):
     cbn = gm.generate_model(data)
+    # cbn.train_data(data)
+    return cbn
+
+def train_seperate(data, cbn):
     cbn.train_data(data)
     return cbn
 
